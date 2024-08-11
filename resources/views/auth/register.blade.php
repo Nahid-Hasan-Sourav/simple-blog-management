@@ -1,52 +1,54 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+@extends('layouts.app')
+
+@section('body')
+    <div class="container">
+        <div class="row justify-content-center align-items-center vh-100">
+            <div class="col-md-5 vh-100">
+                <div class="card">
+                    <form class="card-body " action="{{route('register')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="text-center">
+                            <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png" class="my-3 img-fluid profile-image-pic img-thumbnail rounded-circle"
+                                 alt="profile"
+                                 style="width:120px; height:120px; object-fit:cover;"
+                            >
+                            <h4 class="my-2 fw-bold">CRATE AN ACCOUNT</h4>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="Username" aria-describedby="emailHelp"
+                                   name="name"
+                                   placeholder="Name">
+                        </div>
+
+
+                        <div class="mb-3">
+                            <input type="email" class="form-control" id="Username" aria-describedby="emailHelp"
+                                   name="email"
+                                   placeholder="email">
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="password" class="form-control" id="password" aria-describedby="emailHelp"
+                                   name="password"
+                                   placeholder="password">
+                        </div>
+
+                        <div id="emailHelp" class="mb-2 text-center form-text text-dark">Already an account? <a href="{{route('login')}}" class="text-dark fw-bold"> Login
+                            </a>
+                        </div>
+
+
+
+
+                        <div class="px-3 my-4 text-center row">
+                            <button type="submit" class="px-5 mb-1 btn btn-color w-100 btn-success text-uppercase fw-bold">sign up</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    </div>
+@endsection
