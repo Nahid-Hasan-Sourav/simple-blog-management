@@ -20,6 +20,9 @@
                             <input type="text" class="form-control" id="Username" aria-describedby="emailHelp"
                                    name="name"
                                    placeholder="Name">
+                            @error('name')
+                            <span class="text-danger my-2">{{ $message }}</span>
+                            @enderror
                         </div>
 
 
@@ -27,12 +30,18 @@
                             <input type="email" class="form-control" id="Username" aria-describedby="emailHelp"
                                    name="email"
                                    placeholder="email">
+                            @error('email')
+                            <span class="text-danger my-2">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <input type="password" class="form-control" id="password" aria-describedby="emailHelp"
                                    name="password"
                                    placeholder="password">
+                            @error('password')
+                            <span class="text-danger my-2">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div id="emailHelp" class="mb-2 text-center form-text text-dark">Already an account? <a href="{{route('login')}}" class="text-dark fw-bold"> Login
