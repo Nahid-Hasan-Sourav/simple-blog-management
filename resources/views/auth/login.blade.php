@@ -19,17 +19,31 @@
                         <div class="mt-3 mb-3">
                             <input type="text" name="email" class="form-control" id="Username" aria-describedby="emailHelp"
                                    placeholder="Email">
+                            @error('email')
+                            <span class="text-danger my-2">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <input name="password" type="password" class="form-control" id="password" placeholder="password">
-                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+
+                            @error('password')
+                            <span class="text-danger my-2">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="px-5 mb-1 btn btn-color w-100 btn-success text-uppercase fw-bold">Login</button>
+                            <button type="submit" class="w-100 h-0 btn btn-success text-uppercase fw-bold">Login</button>
                         </div>
 
                         <div id="emailHelp" class="mb-2 text-center form-text text-dark">Don't have an account? <a href="{{route('register')}}" class="text-dark fw-bold"> Create an
                                 Account</a>
+                        </div>
+
+                        <div id="emailHelp" class="mb-2 text-center form-text text-dark">
+                            <a href="{{route('password.request')}}" class="text-dark fw-bold">
+                                Forgot Password
+
+                            </a>
+
                         </div>
                     </form>
 
