@@ -11,13 +11,13 @@
     </div>
   </div>
 
-{{--  <div class="sl-sideleft-menu">--}}
-{{--    <a href="{{ route('blog.index') }}" class="sl-menu-link {{ request()->is('blog*') ? 'active' : '' }}">--}}
-{{--      <div class="sl-menu-item">--}}
-{{--        <span class="menu-item-label">Blog</span>--}}
-{{--      </div>--}}
-{{--    </a>--}}
-{{--    --}}
+  <div class="sl-sideleft-menu">
+    <a href="{{ route('posts.index') }}" class="sl-menu-link {{ request()->is('blog*') ? 'active' : '' }}">
+      <div class="sl-menu-item">
+        <span class="menu-item-label">Post</span>
+      </div>
+    </a>
+
 {{--    <a href="{{ route('home') }}" class="sl-menu-link ">--}}
 {{--      <div class="sl-menu-item">--}}
 {{--        <i class="menu-item-icon icon ion-ios-home-outline tx-22"></i>--}}
@@ -25,7 +25,7 @@
 {{--      </div>--}}
 {{--    </a>--}}
 
-{{--  </div>--}}
+  </div>
 
   <br>
 </div>
