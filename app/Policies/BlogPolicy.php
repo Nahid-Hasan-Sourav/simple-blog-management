@@ -13,7 +13,7 @@ class BlogPolicy
      */
     public function viewAny(User $user): bool
     {
-     return false;
+     return true;
     }
 
     /**
@@ -31,7 +31,7 @@ class BlogPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -55,7 +55,7 @@ class BlogPolicy
      */
     public function restore(User $user, Blog $blog): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -63,6 +63,6 @@ class BlogPolicy
      */
     public function forceDelete(User $user, Blog $blog): bool
     {
-        //
+        return false;
     }
 }

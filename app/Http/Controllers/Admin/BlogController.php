@@ -9,10 +9,10 @@ use App\Models\Blog;
 use App\Traits\ImageTraits;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Request;
-
+use Illuminate\Support\Facades\Gate;
 class BlogController extends Controller
 {
     use ImageTraits;
@@ -23,17 +23,37 @@ class BlogController extends Controller
      */
     public function index(): View
     {
+
+
         return view('admin.post.index');
     }
 
     public function getAllBlogs(): JsonResponse
     {
-        $posts = Blog::where('user_id', Auth::id())->get();
+        // Authorize the user to view their blogs
+        Gate::authorize('viewAny', Blog::class);
+
+        // Get the search term and order from the query parameters
+        $search = request()->query('search', '');
+        $order = request()->query('order', '');
+
+        // Query blogs with optional filtering by title and ordering by created_at
+        $posts = Blog::where('user_id', Auth::id())
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', '%' . $search . '%');
+            })
+            ->when($order, function ($query, $order) {
+                return $query->orderBy('created_at', $order);
+            })
+            ->get();
+
         return response()->json([
             'status' => 'success',
             'data' => $posts,
         ], 200);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -80,7 +100,7 @@ class BlogController extends Controller
 
     }
     //upload image  for ck editor
-    public function uploadImages(\Illuminate\Http\Request $request){
+    public function uploadImages(Request $request){
         if ($request->hasFile('upload')) {
 
             $originName = $request->file('upload')->getClientOriginalName();
@@ -99,8 +119,10 @@ class BlogController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Blog $blog)
+    public function edit(Blog $blog): JsonResponse
     {
+        Gate::authorize('view', $blog);
+
         return response()->json([
             'status' => 'success',
             'data' => $blog,
@@ -110,8 +132,10 @@ class BlogController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBlogRequest $request, Blog $blog)
+    public function update(UpdateBlogRequest $request, Blog $blog): JsonResponse
     {
+        Gate::authorize('update', $blog);
+
         $validatedData = $request->validated();
 
         // Check if a new main image is uploaded
@@ -128,7 +152,6 @@ class BlogController extends Controller
 
         // Handle feature images
         if ($request->hasFile('feature_images')) {
-            // Assuming $post->feature_images is an array of paths
             foreach ($blog->feature_images as $oldImage) {
                 if (file_exists(public_path($oldImage))) {
                     File::delete(public_path($oldImage));
@@ -141,7 +164,6 @@ class BlogController extends Controller
                 $featureImages[] = $this->getImageUrl($image, 'upload/blog/feature_images/');
             }
 
-            // Update the feature_images field (you may need to adjust this based on your DB schema)
             $validatedData['feature_images'] = $featureImages;
         }
 
@@ -158,8 +180,9 @@ class BlogController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Blog $blog)
+    public function destroy(Blog $blog): JsonResponse
     {
+        Gate::authorize('delete', $blog);
         $blog->delete();
         return response()->json([
             'status' => 'success',

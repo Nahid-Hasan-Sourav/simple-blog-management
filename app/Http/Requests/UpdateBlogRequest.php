@@ -23,7 +23,7 @@ class UpdateBlogRequest extends FormRequest
     {
         return [
             'title'=>['required','string','max:255'],
-            'description'=>['required','string'],
+            'description'=>['string'],
             'image'=>['image','mimes:jpeg,png,jpg,gif,svg','max:2048'],
             'feature_images'=>['array'],
             'feature_images.*'=>['image'],

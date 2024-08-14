@@ -10,6 +10,27 @@
 
         </div>
         <div class="div">
+            <div class="form-group">
+               <div class="row">
+                   <div class="col-4">
+                       <label for="search"></label>
+                       <input type="text" class="form-control" id="search" placeholder="Search By Title">
+                   </div>
+
+                   <div class="col-4">
+                       <label for="order"></label>
+                       <select class="form-control" id="order">
+                           <option value="">Sort by Date</option>
+                           <option value="asc">Oldest First</option>
+                           <option value="desc">Newest First</option>
+                       </select>
+                   </div>
+
+
+               </div>
+
+            </div>
+
             <table class="table">
                 <thead>
                 <tr>
@@ -21,12 +42,11 @@
                 </tr>
                 </thead>
                 <tbody id="blogTable">
-
+                <!-- Blog rows will be dynamically populated here -->
                 </tbody>
             </table>
-            <!-- Pagination Links -->
-            {{-- {{$allData->links()}} --}}
         </div>
+
     </div>
 
 
@@ -50,6 +70,7 @@
                 },
             });
         };
+
         showAllBlogDataOnTabel();
         const showTableData = (data) => {
             const tableBody = $("#blogTable");
@@ -230,8 +251,7 @@
                         $("#editImage").attr("src", res.data.image).show(); // Show main image
                         $("#editBtnId").val(res.data.id);
 
-                        // Show the remove button
-                        $(".remove-main-image").show();
+
 
                         // Clear any existing feature images before appending new ones
                         $(".feature-images-container").empty();
@@ -242,7 +262,6 @@
                                 const imgElement = `
                             <div class="feature_images" style="display: inline-block; margin-right: 10px;">
                                 <img src="${img}" width="150" height="150" class="mr-2" />
-                                <button class="btn btn-danger btn-sm remove-feature-image">Remove</button>
                             </div>`;
                                 $(".feature-images-container").append(imgElement);
                             });
@@ -250,17 +269,6 @@
                             $(".feature-images-container").append('<p>No feature images available.</p>');
                         }
 
-                        // Handle removing feature images
-                        $(".remove-feature-image").on("click", function () {
-                            $(this).parent(".feature-image").remove(); // Remove the image element
-                        });
-
-                        // Handle removing the main image
-                        $(".remove-main-image").on("click", function () {
-                            $("#editImage").hide(); // Hide the main image
-                            $(this).hide(); // Hide the remove button
-                            $("#input-file-now").val(''); // Clear the file input value if needed
-                        });
                     }
                 },
                 error: function (xhr) {
@@ -334,12 +342,45 @@
             });
         });
 
+        // Search functionality
+        $(document).ready(function() {
+            $('#search').on('keyup', function() {
+                let searchTerm = $(this).val().toLowerCase();
 
+                $.ajax({
+                    url: "{{ route('blogs.all') }}",
+                    type: "GET",
+                    data: { search: searchTerm }, // Pass searchTerm as query param
+                    success: function (res) {
+                        if (res.status === "success") {
+                            let data = res.data;
+                            showTableData(data);
+                        }
+                    },
+                });
+            });
+        });
 
+        // Sorting functionality
+        $(document).ready(function() {
+            $('#order').on('change', function() {
+                let order = $(this).val();
 
-
-
-
+                $.ajax({
+                    url: "{{ route('blogs.all') }}",
+                    type: "GET",
+                    data: {
+                        order: order,
+                    },
+                    success: function (res) {
+                        if (res.status === "success") {
+                            let data = res.data;
+                            showTableData(data);
+                        }
+                    },
+                });
+            });
+        });
 
 
 
