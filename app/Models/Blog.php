@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Post extends Model
+class Blog extends Model
 {
     use HasFactory,HasUuids;
     protected $fillable = ['title', 'description', 'image', 'feature_images', 'user_id'];

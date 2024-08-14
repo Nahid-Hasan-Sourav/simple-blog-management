@@ -12,9 +12,9 @@
   </div>
 
   <div class="sl-sideleft-menu">
-    <a href="{{ route('posts.index') }}" class="sl-menu-link {{ request()->is('blog*') ? 'active' : '' }}">
+      <a href="{{ route('blogs.index') }}" class="sl-menu-link {{ request()->is('dashboard/blogs*') ? 'active' : '' }}">
       <div class="sl-menu-item">
-        <span class="menu-item-label">Post</span>
+        <span class="menu-item-label">Blogs</span>
       </div>
     </a>
 

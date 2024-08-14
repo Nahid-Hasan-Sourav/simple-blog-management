@@ -13,28 +13,28 @@
                 <div class="modal-body">
                     <div class="form-group row">
                         <label for="title" class="col-sm-4 control-label">Title</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="title" id="title" placeholder="Blog Title" required>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" name="title" id="title" placeholder="Blog Title"  >
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="description" class="col-sm-4 control-label">Description</label>
-                        <div class="col-sm-8">
-                            <textarea class="form-control" name="description"  id="editor" placeholder="Blog Description" required></textarea>
+                        <div class="col-sm-12">
+                            <textarea class="form-control" name="description"  id="editor" placeholder="Blog Description"  ></textarea>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="image" class="col-sm-4 control-label">Main Image</label>
-                        <div class="col-sm-8">
-                            <input type="file" id="image" name="image" class="dropify" required/>
+                        <div class="col-sm-12">
+                            <input type="file" id="image" name="image" class="dropify"/>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="feature_images" class="col-sm-4 control-label">Feature Images (Optional)</label>
-                        <div class="col-sm-8">
+                        <div class="col-sm-12">
                             <input type="file" id="feature_images" name="feature_images[]" class="dropify" multiple/>
                         </div>
                     </div>
@@ -47,4 +47,23 @@
             </form>
         </div>
     </div>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('blog.uploadImages', ['_token' => csrf_token()]) }}"
+                }
+            })
+            .then(editor => {
+                console.log('CKEditor initialized successfully');
+
+
+            })
+            .catch(error => {
+                console.error('Error initializing CKEditor:', error);
+            });
+
+
+    </script>
+
 </div>
