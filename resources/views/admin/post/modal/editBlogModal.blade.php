@@ -35,7 +35,8 @@
                         <label for="editFeatureImages" class="col-sm-12 control-label">Feature Images (Optional)</label>
                         <p></p>
                         <div class="col-sm-12">
-                            <input type="file" id="feature_images" name="feature_images[]" class="dropify" multiple />                        </div>
+                            <input type="file" id="feature_images" name="feature_images[]" class="dropify" multiple />
+                        </div>
                     </div>
 
                     <div class="form-group row feature-images-container">
@@ -47,7 +48,6 @@
                                 <input type="file" id="input-file-now" name="image" class="dropify" />
                             </div>
                         </div>
-
                     </div>
 
                     <input type="hidden" id="editBtnId" name="id" /> <!-- Hidden input for blog ID -->
@@ -62,6 +62,8 @@
     </div>
 
     <script>
+        let editorInstance;
+
         ClassicEditor
             .create(document.querySelector('#editDescription'), {
                 ckfinder: {
@@ -69,14 +71,11 @@
                 }
             })
             .then(editor => {
+                editorInstance = editor;
                 console.log('CKEditor initialized successfully');
-
-
             })
             .catch(error => {
                 console.error('Error initializing CKEditor:', error);
             });
-
-
     </script>
 </div>

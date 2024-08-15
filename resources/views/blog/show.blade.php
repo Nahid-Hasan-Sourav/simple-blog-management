@@ -8,7 +8,8 @@
             <img src="{{ asset($blog->image) }}" class="card-img-top" style="height: 350px; opacity: 0.5;" alt="image"/>
             <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center text-white">
                 <h5 class="card-title text-center text-primary">{{ $blog->title }}</h5>
-                <p class="card-text text-center text-primary">Last updated {{ $blog->updated_at->diffForHumans() }}</p>                <small class="text-center text-primary">Posted By: {{ $blog->user->name }}</small>
+                <p class="card-text text-center text-primary">Last updated {{ $blog->updated_at->diffForHumans() }}</p>
+                <small class="text-center text-primary">Posted By: {{ $blog->user->name }}</small>
             </div>
         </div>
 

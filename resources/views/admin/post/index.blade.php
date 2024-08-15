@@ -56,7 +56,9 @@
 
 
 @push('scripts')
+
     <script>
+
 
         const showAllBlogDataOnTabel = () => {
             $.ajax({
@@ -78,7 +80,7 @@
             console.log("Data === : ", data);
             if (data.length > 0) {
                 data.forEach((item, index) => {
-                    console.log('image',item.image);
+                    console.log('image test',item.image);
                     const row =
                         `
                         <tr>
@@ -90,7 +92,7 @@
                            </td>
                            <td>
                               ${item.feature_images.map((img, index) => {
-                                return `<img src="${item.image}" alt="img" width="50px" class="mr-2" height="50px">`
+                                return `<img src="${img}" alt="img" width="50px" class="mr-2" height="50px">`
                               })}
                            </td>
                            <td>
@@ -114,78 +116,74 @@
 
         $(document).ready(function () {
             showAllBlogDataOnTabel();
-
-            $(".blogButton").click(function () {
-              $("#blogModal").modal('show');
-
-            });
-
-            //create blog start here
-            $("#submitBlogForm").submit(function (e) {
-                e.preventDefault();
-                const form = e.target;
-                const title = form.title.value;
-                const description = form.description.value;
-                const image = form.image.files[0];
-                const feature_images = form.feature_images.files;
-
-                const formData = new FormData();
-
-                formData.append("title", title);
-                formData.append("description", description);
-                formData.append("image", image);
-
-                // Append each selected feature image to the FormData object
-                for (let i = 0; i < feature_images.length; i++) {
-                    formData.append("feature_images[]", feature_images[i]);
-                }
-
-                $.ajaxSetup({
-                    headers: {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                    },
-                });
-
-                $.ajax({
-                    url: "{{ route('blogs.store') }}",
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        if (response.status === "success") {
-                            console.log("Response store === : ", response);
-                            showAllBlogDataOnTabel();
-                            form.reset();
-                            $("#blogModal").modal("hide");
-
-
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Blog Added',
-                                text: 'The Blog has been successfully added.',
-                                timer: 5000,
-                                showConfirmButton: true
-                            })
-                        }
-                    },
-                    error: function (xhr) {
-                        var response = JSON.parse(xhr.responseText);
-                        if (response.errors) {
-                            Object.keys(response.errors).forEach(function (field) {
-                                response.errors[field].forEach(function (errorMessage) {
-                                    toastr.error(errorMessage);
-                                });
-                            });
-                        }
-                    },
-                });
-            });
-            //create blog end here
-
-
-
         });
+
+        $(".blogButton").click(function () {
+            $("#blogModal").modal('show');
+        });
+
+        //create blog start here
+        $("#submitBlogForm").submit(function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const title = form.title.value;
+            const description = form.description.value;
+            const image = form.image.files[0];
+            const feature_images = form.feature_images.files;
+
+            const formData = new FormData();
+
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("image", image);
+
+            // Append each selected feature image to the FormData object
+            for (let i = 0; i < feature_images.length; i++) {
+                formData.append("feature_images[]", feature_images[i]);
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                url: "{{ route('blogs.store') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.status === "success") {
+                        // console.log("Response store === : ", response);
+                        showAllBlogDataOnTabel();
+                        form.reset();
+                        $("#blogModal").modal("hide");
+
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Blog Added',
+                            text: 'The Blog has been successfully added.',
+                            timer: 5000,
+                            showConfirmButton: true
+                        })
+                    }
+                },
+                error: function (xhr) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.errors) {
+                        Object.keys(response.errors).forEach(function (field) {
+                            response.errors[field].forEach(function (errorMessage) {
+                                toastr.error(errorMessage);
+                            });
+                        });
+                    }
+                },
+            });
+        });
+        //create blog end here
 
         //delete blog start here
         const deleteBlog = (e) => {
@@ -238,6 +236,14 @@
         //edit blog start here
         const editBlog = (e) => {
             $("#editBlogModal").modal("show");
+            $("#editTitle").val('');
+            $("#editBtnId").val('');
+           $("#editDescription").val('');
+            $("#editImage").attr("src", '').hide();
+            $(".feature-images-container").empty();
+
+
+
             let id = e.currentTarget.value;
 
             $.ajax({
@@ -245,12 +251,12 @@
                 type: "GET",
                 success: function (res) {
                     if (res.status === "success") {
+                        console.log('Description === : ', res.data.description);
                         // Populate the form fields
                         $("#editTitle").val(res.data.title);
-                        $("#editDescription").val(res.data.description);
-                        $("#editImage").attr("src", res.data.image).show(); // Show main image
                         $("#editBtnId").val(res.data.id);
-
+                        editorInstance.setData(res.data.description); // Set CKEditor value
+                        $("#editImage").attr("src", res.data.image).show();
 
 
                         // Clear any existing feature images before appending new ones
@@ -269,6 +275,8 @@
                             $(".feature-images-container").append('<p>No feature images available.</p>');
                         }
 
+
+
                     }
                 },
                 error: function (xhr) {
@@ -278,6 +286,7 @@
         };
 
         // Update blog form submission
+
         $("#editBlogForm").submit(function (e) {
             e.preventDefault(); // Prevent the default form submission
 
@@ -306,7 +315,6 @@
 
             // Append each selected feature image to the FormData object
             for (let i = 0; i < feature_images.length; i++) {
-                console.log("test image",feature_images[i])
                 formData.append("feature_images[]", feature_images[i]);
             }
 
@@ -323,6 +331,7 @@
                 success: function (response) {
                     console.log("Response Updated data: ", response);
                     if (response.status === "success") {
+                        form.reset(); // Reset the form fields
                         $("#editBlogModal").modal("hide"); // Hide the modal if success
                         Swal.fire({
                             icon: 'success',

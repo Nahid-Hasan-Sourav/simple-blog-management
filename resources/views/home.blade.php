@@ -87,7 +87,7 @@
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
 
             @forelse($blogs as $blog)
-                <a class="col" href="{{ route('blog.show', $blog->id) }}">
+                <a class="col text-decoration-none" href="{{ route('blog.show', $blog->id) }}">
                     <div class="card">
                         <img src="{{ $blog->image }}" class="card-img-top" style="height:250px" alt="Fissure in Sandstone">
                         <div class="card-body">
